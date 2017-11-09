@@ -1,0 +1,12 @@
+#version 400 compatibility// -*- c++ -*-
+in vec3 m_normal;
+in vec4 m_pos;
+in vec4 m_color;
+uniform vec3 light_pos;
+uniform float light_spot_angle;
+in vec2 m_TexCoord0;
+layout(location=0) out vec4 depth_vec4;
+void main(void)
+{
+depth_vec4=vec4(length(m_pos.xyz-light_pos)/10);
+}
