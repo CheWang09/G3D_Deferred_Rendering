@@ -1,0 +1,34 @@
+#version 400 compatibility// -*- c++ -*-
+in vec3 m_normal;
+in vec4 m_pos;
+in vec4 m_color;
+uniform vec3 light_pos;
+uniform float light_spot_angle;
+uniform sampler2D sampler0;
+uniform mat4 M;
+layout(location=0) out vec4 pos4;
+layout(location=1) out vec4 norm4;
+layout(location=2) out vec4 vis;
+void main(void)
+{
+pos4=vec4(m_pos.xyz/m_pos.w,1);
+norm4=vec4(m_normal,0.0);
+vec3 L = normalize(light_pos-m_pos.xyz);
+vec3 light_dir = vec3(0,-1,0);
+if(dot(L,-light_dir)>cos(light_spot_angle*3.1415926/180))
+{
+vec4 p2_light = M * m_pos;
+p2_light.xyz = p2_light.xyz/p2_light.w;
+vec2 m_TexCoord;
+m_TexCoord.x = (p2_light.x+1)/2;
+m_TexCoord.y = (p2_light.y+1)/2;
+vec4 ss = texture2D(sampler0, m_TexCoord);
+if(ss.x>length(light_pos-m_pos.xyz)/10-0.005)
+vis = vec4(1.0);//lighted
+else
+vis = vec4(0);//shadowed
+}
+else
+{
+vis = vec4(1.0);//remove the spot light's effects
+}}
