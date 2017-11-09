@@ -1,0 +1,20 @@
+#version 400 compatibility // -*- c++ -*-
+//#expect USE_BONES "1 or 0"
+attribute vec4 g3d_Vertex;
+attribute vec3 g3d_Normal;
+attribute vec2 g3d_TexCoord0;
+uniform vec3 light_pos;
+uniform float light_spot_angle;
+uniform vec3 app_translate;
+uniform mat4 rotate;
+out vec3 m_normal;
+out vec4 m_color;
+out vec4 m_pos;
+void main() {
+vec4 vertex = (rotate*g3d_Vertex + vec4(app_translate,0));
+gl_Position = gl_ModelViewProjectionMatrix*vertex;
+m_pos = vertex;
+m_normal = g3d_Normal;
+m_color = gl_Color;
+gl_FrontColor = vec4(1.0);
+}
